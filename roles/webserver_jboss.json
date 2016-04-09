@@ -1,0 +1,8 @@
+{
+ "name" : "webserver_jboss",
+  "description" : "manages the JBOSS server!",
+  "run_list" : [
+  "recipe[chef-client]",
+  "recipe[chef-client::delete_validation]"
+  ]
+}
