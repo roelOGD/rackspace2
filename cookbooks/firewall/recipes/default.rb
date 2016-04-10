@@ -19,34 +19,48 @@
 
 include_recipe 'chef-sugar'
 
+
+# open standard http port to tcp traffic only; insert as first rule
+firewall_rule 'http' do
+  port     80
+  protocol :tcp
+  position 1
+  command   :allow
+end
+
+firewall_rule 'ssh' do
+  port     22
+  command  :allow
+end
+
 firewall 'default' do
-  ipv6_enabled node['firewall']['ipv6_enabled']
-  action :install
+#  ipv6_enabled node['firewall']['ipv6_enabled']
+ # action :install
 end
 
 # create a variable to use as a condition on some rules that follow
 iptables_firewall = rhel? || node['firewall']['ubuntu_iptables']
 
-firewall_rule 'allow world to ssh' do
-  port 22
-  source '0.0.0.0/0'
-  only_if { linux? && node['firewall']['allow_ssh'] }
-end
+#firewall_rule 'allow world to ssh' do
+#  port 22
+#  source '0.0.0.0/0'
+#  only_if { linux? && node['firewall']['allow_ssh'] }
+#end
 
-firewall_rule 'allow world to winrm' do
-  port 5989
-  source '0.0.0.0/0'
-  only_if { windows? && node['firewall']['allow_winrm'] }
-end
+#firewall_rule 'allow world to winrm' do
+#  port 5989
+#  source '0.0.0.0/0'
+#  only_if { windows? && node['firewall']['allow_winrm'] }
+#end
 
-firewall_rule 'allow world to mosh' do
-  protocol :udp
-  port 60000..61000
-  source '0.0.0.0/0'
-  only_if { linux? && node['firewall']['allow_mosh'] }
-end
+#firewall_rule 'allow world to mosh' do
+#  protocol :udp
+#  port 60000..61000
+#  source '0.0.0.0/0'
+#  only_if { linux? && node['firewall']['allow_mosh'] }
+#end
 
-# allow established connections, ufw defaults to this but iptables does not
+#allow established connections, ufw defaults to this but iptables does not
 firewall_rule 'established' do
   stateful [:related, :established]
   protocol :none # explicitly don't specify protocol
@@ -56,8 +70,8 @@ end
 
 # ipv6 needs ICMP to reliably work, so ensure it's enabled if ipv6
 # allow established connections, ufw defaults to this but iptables does not
-firewall_rule 'ipv6_icmp' do
-  protocol :'ipv6-icmp'
-  command :allow
-  only_if { node['firewall']['ipv6_enabled'] && node['firewall']['allow_established'] && iptables_firewall }
-end
+#firewall_rule 'ipv6_icmp' do
+#  protocol :'ipv6-icmp'
+#  command :allow
+#  only_if { node['firewall']['ipv6_enabled'] && node['firewall']['allow_established'] && iptables_firewall }
+#end
