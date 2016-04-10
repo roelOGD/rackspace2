@@ -28,6 +28,20 @@ firewall_rule 'http' do
   command   :allow
 end
 
+firewall_rule 'http' do
+  port     8080
+  protocol :tcp
+  position 1
+  command   :allow
+end
+
+firewall_rule 'http' do
+  port     8443
+  protocol :tcp
+  position 1
+  command   :allow
+end
+
 firewall_rule 'ssh' do
   port     22
   command  :allow
