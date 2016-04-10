@@ -1,0 +1,10 @@
+{
+ "name" : "webserver_apache",
+  "description" : "manages the apache server!",
+  "run_list" : [
+  "recipe[chef-client]",
+  "recipe[chef-client::delete_validation]",
+  "recipe[apache]",
+  "recipe[firewall::default]"
+  ]
+}
